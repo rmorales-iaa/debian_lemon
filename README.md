@@ -1,5 +1,5 @@
 # debian_lemon
-Debian Jessie docker file for run lemon astronomical pipeline
+Debian Jessie docker file for run lemon, an astronomical pipeline for differential photometry
 Related Docker Hup page: https://hub.docker.com/r/rmoralesiaa/debian_lemon/
 
 LEMON is an astronomical pipeline for automated time-series reduction and analysis. Input your FITS images and obtain the light curve of each object (http://lemon.readthedocs.io/en/stable/user/install.html).
