@@ -1,10 +1,11 @@
 docker-lemon is a docker image which makes it easy to run [LEMON, the differential photometry pipeline](https://github.com/vterron/lemon)
 
-## Building the image
+## Building the image (just once)
 
-`docker build -t lemondoc .`
+`sudo docker build -t debian:lemon .`
 
 ## Starting container
+`sudo docker run -it debian:lemon`
 
 Assuming you have fits files in ~/Pictures on your PC, the following command will make them available at /data in the container
 
