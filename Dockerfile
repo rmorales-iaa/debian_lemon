@@ -1,88 +1,73 @@
-#--------------------------------------------------------
-#debian jessie latest
-#build image with docker file
-#docker build -t debian_lemon:latest -f ./debian_lemon.dockerfile .
-#--------------------------------------------------------
-FROM debian
-#--------------------------------------------------------
-#Packet install and program download
-ENV DEBIAN_FRONTEND noninteractive
-RUN mkdir -p /root/Downloads && \
-cd /root/Downloads && \
-export TERM=xterm && \
-apt-get -y update && \
-apt-get install -y wget apt-utils x11-apps build-essential checkinstall python libx11-dev git python-pip csh python-matplotlib python-scipy libopenmpi-dev openmpi-bin libhdf5-openmpi-dev csh xutils-dev ncompress vim fftw3-dev libatlas-base-dev libcairo2-dev libnetpbm10-dev netpbm libpng12-dev libjpeg-dev python-numpy python-pyfits python-dev zlib1g-dev libbz2-dev swig libcfitsio-dev pkg-config && \
-wget ftp://iraf.noao.edu/iraf/v216/PCIX/iraf.lnux.x86_64.tar.gz && \
-wget http://www.astromatic.net/download/sextractor/sextractor-2.19.5.tar.gz && \
-wget http://astrometry.net/downloads/astrometry.net-0.43.tar.gz && \
-wget http://montage.ipac.caltech.edu/download/Montage_v4.0.tar.gz && \
-#lemon && \
-easy_install -U distribute  && \
-cd /root  && \
-git clone git://github.com/vterron/lemon.git ~/lemon  && \
-cd ~/lemon  && \
-pip install "numpy>=1.7.1"  && \
-pip install -r pre-requirements.txt && \
-pip install -r requirements.txt && \
-#iraf && \
-rm -fr /iraf && \
-mkdir -p /iraf/iraf && \
-cd /iraf/iraf && \
-tar xvf /root/Downloads/iraf.lnux.x86_64.tar.gz  && \
-rm /root/Downloads/iraf.lnux.x86_64.tar.gz && \
-export iraf="/iraf/iraf/" && \
-echo '\n \n \n \n yes' | ./install --system && \
-cd /iraf && \
-echo -e '\n' | mkiraf  && \
-echo '#================' >> ~/.bashrc && \
-echo '#lemon' >> ~/.bashrc && \
-echo '#================' >> ~/.bashrc && \
-echo 'export iraf=/iraf/iraf/' >> ~/.bashrc && \
-echo 'PATH=$PATH:/usr/local/bin/' >> ~/.bashrc && \
-#sextractor && \
-rm -fr /root/tmp && \
-mkdir -p /root/tmp && \
-cd /root/tmp && \
-tar xvf /root/Downloads/sextractor-2.19.5.tar.gz && \
-rm /root/Downloads/sextractor-2.19.5.tar.gz && \
-cd ./sextractor-2.19.5 && \
-update-alternatives --set liblapack.so /usr/lib/atlas-base/atlas/liblapack.so && \
-./configure --with-atlas-incdir=/usr/include/atlas && \
-make && \
-make install && \
-echo 'PATH=$PATH:/usr/local/share/sextractor' >> ~/.bashrc && \
-#astrometry.net (latest version is not compatible with lemmon: i.e. --no-fits2fits. Using version 0.43 ) && \
-cd /root/tmp && \
-tar xvf /root/Downloads/astrometry.net-0.43.tar.gz  && \
-rm /root/Downloads/astrometry.net-0.43.tar.gz  && \
-cd astrometry.net-0.43/ && \
-make && \
-make py && \
-make extra && \
-make install && \
-echo 'PATH=$PATH:/usr/local/astrometry/bin' >> ~/.bashrc && \
-sed -i -e 's/#inparallel/inparallel/g' /usr/local/astrometry/bin/../etc/backend.cfg  && \
-sed -i -e 's#add_path /usr/local/astrometry/data#add_path /root/lemon/data/index#g' /usr/local/astrometry/bin/../etc/backend.cfg  && \
-#montage && \
-cd /root/tmp && \
-tar xvf /root/Downloads/Montage_v4.0.tar.gz && \
-rm  /root/Downloads/Montage_v4.0.tar.gz  && \
-cd montage && \
-sed -i -e 's/# MPICC  =/MPICC  =/g' Montage/Makefile.LINUX && \
-sed -i -e 's/# BINS =/BINS =/g' Montage/Makefile.LINUX && \
-make && \
-mkdir /root/montage  && \
-mv bin/ /root/montage  && \
-mv lib/ /root/montage  && \
-echo 'PATH=$PATH:/root/montage/bin/' >> ~/.bashrc && \
-rm -fr /root/tmp && \
-#finish lemon install  && \
-cd /root/lemon && \
-python ./setup.py && \
-echo 'PATH=$PATH:~/lemon/' >> ~/.bashrc && \
-echo "source ~/lemon/lemon-completion.sh" >> ~/.bashrc && \
-echo 'export PATH' >> ~/.bashrc && \
-echo '#End of file' >> ~/.bashrc && \
-mkdir -p /root/lemon/data/index && \
-mkdir -p /root/lemon/data/in  && \
-mkdir -p /root/lemon/data/out
+FROM debian:jessie
+
+#add lemon user
+RUN useradd -ms /bin/bash lemon
+
+#initial repo update
+RUN apt-get -y update
+
+#basic tools
+RUN apt-get install -y wget vim git csh
+
+#python tools
+RUN apt-get install -y python-gtk2-dev python-pip python-matplotlib python-scipy python-numpy python-pyfits python-dev
+
+#common libraries and tools
+RUN apt-get install -y libopenmpi-dev apt-utils x11-apps build-essential checkinstall python libx11-dev git csh  openmpi-bin libhdf5-openmpi-dev csh xutils-dev ncompress fftw3-dev libatlas-base-dev libcairo2-dev libnetpbm10-dev netpbm libpng12-dev libjpeg-dev zlib1g-dev libbz2-dev swig libcfitsio-dev pkg-config gcc make perl flex
+
+#update 
+RUN apt-get -y upgrade
+
+#sextractor
+RUN apt install sextractor
+
+
+#astrometry.net
+RUN mkdir -p /root/Downloads && \ 
+    cd /root/Downloads && \ 
+    wget http://astrometry.net/downloads/astrometry.net-0.76.tar.gz  && \ 
+    tar xvf astrometry.net-0.76.tar.gz && \ 
+    cd astrometry.net-0.76 && \
+    make && \
+    make py && \
+    make extra && \
+    make install  && \
+    echo 'PATH=$PATH:/usr/local/astrometry/bin' >> ~/.bashrc
+    
+#IRAF
+RUN mkdir /iraf
+RUN git clone https://github.com/iraf-community/iraf.git 
+RUN cd /iraf && echo '\n \n \n \n yes' | ./install --system 
+RUN echo 'export iraf=/iraf/iraf/' >> ~/.bashrc 
+RUN echo 'PATH=$PATH:/usr/local/bin/' >> ~/.bashrc 
+
+
+#Montage
+WORKDIR /montage
+RUN git clone https://github.com/dokeeffe/Montage.git
+WORKDIR /montage/Montage
+RUN sed -i "s|# MPICC  =	mpicc|MPICC  =	mpicc |g" Montage/Makefile.LINUX
+RUN sed -i "s|# BINS = 	|BINS =  |g" Montage/Makefile.LINUX
+RUN make 
+USER lemon
+RUN echo 'PATH=$PATH:/montage/Montage/bin' >> ~/.bashrc
+
+
+# clone lemon and install (using lemon user)
+USER root
+RUN git clone https://github.com/vterron/lemon.git /home/lemon/lemon
+WORKDIR /home/lemon/lemon
+#pre requirements
+RUN pip install astropy==1.3.2  d2to1
+RUN pip install absl-py==0.10.0 APLpy==1.1.1 scipy matplotlib mock prettytable==0.7.2 pyfits setuptools==40.6.3 
+RUN pip install stsci.distutils==0.3.7 stsci.tools==3.4.11
+RUN pip install pytest-runner==4.2 traitlets==4.3.3 pyraf==2.1.15 uncertainties unittest2==1.0.0 montage-wrapper requests subprocess32
+
+#lemon setup
+RUN python ./setup.py
+
+# Add custom CCD-filters here. My 'V' filter is 'PV' in the fits headers
+RUN echo 'PATH=$PATH:~/lemon' >> ~/.bashrc
+RUN echo '[custom_filters]' >> ~/.lemonrc
+RUN echo 'PV = V (BAADER V)' >> ~/.lemonrc
+RUN echo 'PB = B (BAADER B)' >> ~/.lemonrc
