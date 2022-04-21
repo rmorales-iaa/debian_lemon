@@ -38,6 +38,7 @@ RUN mkdir -p /root/Downloads && \
 RUN mkdir /iraf
 RUN git clone https://github.com/iraf-community/iraf.git 
 RUN cd /iraf && echo '\n \n \n \n yes' | ./install --system 
+RUN make linux64 && make sysgen 2>&1 | tee build.log 
 RUN echo 'export iraf=/iraf/iraf/' >> ~/.bashrc 
 RUN echo 'PATH=$PATH:/usr/local/bin/' >> ~/.bashrc 
 
