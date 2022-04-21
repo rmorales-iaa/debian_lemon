@@ -13,27 +13,27 @@ Assuming you have fits files in ~/Pictures on your PC, the following command wil
 
 ## Reducing fits files
 
-The example below I already have the calibrated and plate solved fits files in a directory on my PC called ~/Pictures/xo-2b
+`lemon astrometry data/in/ data/out/`
 
 ### Running mosaic
 
-An example of running against all fits files in my xo-2b dir
+An example of running against all fits files in 'data/in' dir over file 'a.fits'
 
-`lemon mosaic /data/xo-2b/*.fits xo-2b.fits`
+`lemon mosaic data/in/*.fits data/out/a.fits`
 
 ### Run photometry
 
-`lemon photometry /data/xo-2b.fits /data/xo-2b/*.fits phot.LEMONdB`
+`lemon photometry main_fits /dir/*.fits data/out/phot.LEMONdB`
 
 ### Create the differential photometry data
 
 This command will take data from the phot.LEMONdB and create a new database called curves.LEMONdB
 
-`lemon diffphot /data/phot.LEMONdB /data/curves.LEMONdB`
+`lemon diffphot data/out/phot.LEMONdB data/out/curves.LEMONdB`
 
 ### Run the jucier browser app
 
-`lemon juicer phot.LEMONdB`
+`lemon juicer data/out/curves.LEMONdB`
 
 ![screenshot](https://raw.githubusercontent.com/dokeeffe/docker-lemon/master/docs/juicer-screenshot.png)
 
