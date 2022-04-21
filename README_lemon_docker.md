@@ -14,7 +14,7 @@ This means that the user must solve the astrometry and align the images without 
 
 `./lemon_docker bash`
 
-#running the command from docker script generates an error loading the FITS files, so it is necesary to go inside the container
+#running the photometry command using docker script generates an error loading the FITS files, so it is necesary to go inside the container
 
 `su lemon &&
 lemon photometry ~/data/in/science_HAT-P-16-001Rbfa_OSN_1_5_2014_10_31T19_59_01_140_JOHNSON_R_30s_2048x2048_roper_OBJECT.fits  ~/data/in/*.fits ~/data/out/phot.LEMONdB &&
@@ -22,6 +22,6 @@ lemon diffphot ~/data/out/phot.LEMONdB ~/data/out/curves.LEMONdB &&
 exit &&
 exit`
 
-#lemon juicer must be run outside of container using the docker script
+#lemon juicer it a GUI, so it must be run outside of container using the docker script
 
 `./lemon_docker "/home/lemon/lemon/lemon juicer /home/lemon/data/out/curves.LEMONdB"`
