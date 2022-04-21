@@ -4,7 +4,7 @@ docker-lemon is a docker image which makes it easy to run [LEMON, the differenti
 
 `sudo docker build -t debian:lemon .`
 
-## Starting container
+## Starting a container with the image
 `sudo docker run -it debian:lemon`
 
 Assuming you have fits files in ~/Pictures on your PC, the following command will make them available at /data in the container
