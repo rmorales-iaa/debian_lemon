@@ -1,0 +1,33 @@
+#!/bin/bash
+#----------------------------------
+#user command
+USER_COMMAND=$1
+#----------------------------------
+DOCKER_IMAGE="debian:lemon"
+USER=root
+#----------------------------------
+XSOCK=/tmp/.X11-unix/X0
+MY_DISPLAY=$DISPLAY
+XAUTHORITY_DIR=/tmp/.X11-unix:/tmp/.X11-unix
+XAUTHORITY_VOLUMEN="$HOME/.Xauthority:/root/.Xauthority:rw"
+#----------------------------------
+#link local files in the docker. Local_dir:remote:dir
+ASTROMETRY_NET_INDEX_DIR=/media/data/images/tools/astrometry.net/indexes_gaia_edr3/:/usr/local/astrometry/data
+LEMON_DATA_IN=/home/rafa/apps/lemon/data/in/:/home/lemon/lemon/data/in
+LEMON_DATA_OUT=/home/rafa/apps/lemon/data/out/:/home/lemon/lemon/data/out./
+#----------------------------------
+sudo docker run --privileged=true -it \
+ --user $USER \
+ --net host \
+ -e DISPLAY=$MY_DISPLAY \
+ --volume=$XAUTHORITY_VOLUMEN \
+ -v $XAUTHORITY_DIR \
+ -v $ASTROMETRY_NET_INDEX_DIR \
+ -v $LEMON_DATA_IN \
+ -v $LEMON_DATA_OUT \
+ $DOCKER_IMAGE \
+ $USER_COMMAND
+#----------------------------------
+
+#end of file
+
