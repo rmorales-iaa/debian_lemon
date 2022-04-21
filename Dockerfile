@@ -13,7 +13,7 @@ RUN apt-get install -y wget vim git csh
 RUN apt-get install -y python-gtk2-dev python-pip python-matplotlib python-scipy python-numpy python-pyfits python-dev
 
 #common libraries and tools
-RUN apt-get install -y libopenmpi-dev apt-utils x11-apps build-essential checkinstall python libx11-dev git csh  openmpi-bin libhdf5-openmpi-dev csh xutils-dev ncompress fftw3-dev libatlas-base-dev libcairo2-dev libnetpbm10-dev netpbm libpng12-dev libjpeg-dev zlib1g-dev libbz2-dev swig libcfitsio-dev pkg-config gcc make perl flex
+RUN apt-get install -y libopenmpi-dev apt-utils x11-apps build-essential checkinstall python libx11-dev git csh  openmpi-bin libhdf5-openmpi-dev csh xutils-dev ncompress fftw3-dev libatlas-base-dev libcairo2-dev libnetpbm10-dev netpbm libpng12-dev libjpeg-dev zlib1g-dev libbz2-dev swig libcfitsio-dev pkg-config gcc make perl flex curl
 
 #update 
 RUN apt-get -y upgrade
