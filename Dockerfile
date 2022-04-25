@@ -21,16 +21,20 @@ RUN apt-get -y upgrade
 #sextractor
 RUN apt install sextractor
 
-#astrometry.net
+#python3 (used in astrometry.net)
+RUN ln -s /usr/bin/python /usr/bin/python3
+
+#astrometry.net (version 0.80)
 RUN mkdir -p /root/Downloads && \ 
     cd /root/Downloads && \ 
-    wget http://astrometry.net/downloads/astrometry.net-0.76.tar.gz  && \ 
-    tar xvf astrometry.net-0.76.tar.gz && \ 
-    cd astrometry.net-0.76 && \
+    git clone https://github.com/dstndstn/astrometry.net.git  && \       
+    cd astrometry.net && \
+    git checkout 744be0ed1453ac9017909fdfafb7f4eddd785812 \
     make && \
     make py && \
     make extra && \
     make install  && \
+    rm -fr /root/Downloads && \
     echo 'PATH=$PATH:/usr/local/astrometry/bin' >> ~/.bashrc
     
 #IRAF
