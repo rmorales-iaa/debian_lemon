@@ -45,6 +45,17 @@ RUN make linux64 && make sysgen 2>&1 | tee build.log
 RUN echo 'export iraf=/iraf/iraf/' >> ~/.bashrc 
 RUN echo 'PATH=$PATH:/usr/local/bin/' >> ~/.bashrc 
 
+
+#openmpi (required by Montage) 
+RUN mkdir -p /root/Downloads
+RUN cd /root/Downloads 
+RUN wget https://download.open-mpi.org/release/open-mpi/v1.8/openmpi-1.8.8.tar.gz
+RUN tar xvf openmpi-1.8.8.tar.gz
+RUN cd openmpi-1.8.8
+RUN sed -i 's/#define PROC_MOUNT_LINE_LEN 512/#define PROC_MOUNT_LINE_LEN (512*1024)/' opal/mca/hwloc/hwloc191/hwloc/src/topology-linux.c
+RUN ./configure --prefix=/usr/bin/ --disable-dlopen && make -j 8 && make install
+RUN rm -fr /root/Downloads
+
 #Montage
 WORKDIR /montage
 RUN git clone https://github.com/dokeeffe/Montage.git
