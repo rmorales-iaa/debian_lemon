@@ -6,13 +6,13 @@ docker-lemon is a docker image which makes it easy to run [LEMON, the differenti
 
 ## docker script to run lemmon commads
 
-There is a docker script to run lemon commands in the repo:[lemon_docker](https://github.com/rmorales-iaa/debian_lemon/blob/master/lemon_docker)
+There is a docker script to run lemon commands in the repo:[lemon_docker] (https://github.com/rmorales-iaa/debian_lemon/blob/master/lemon_docker)
 
 There is a docker image with docker deployed [lemon_docker_image](https://hub.docker.com/repository/docker/rmoralesiaa/debian)
 
-Please review the scritp to adapt properly the shared directories between host and container.
+Please review the scritp to adapt properly the shared directories between host and container in (https://github.com/rmorales-iaa/debian_lemon/blob/master/lemon_docker)
 
-Running the photometry command using docker script generates an error loading the FITS files, so it is necesary to go inside the container for running all commands expcept juices (see below).
+Running the photometry command using docker script generates an error loading the shared directories with FITS files, so it is necesary to go inside the container for running all commands except 'juicer' (see below).
 
 
 ## Example of running lemon astrometry using docker script
