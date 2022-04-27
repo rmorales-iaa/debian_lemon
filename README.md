@@ -12,7 +12,7 @@ There is a docker image with docker deployed [lemon_docker_image](https://hub.do
 
 Please review the scritp to adapt properly the shared directories between host and container in (https://github.com/rmorales-iaa/debian_lemon/blob/master/lemon_docker)
 
-Running lemon¡s commands using docker script generates an error loading the shared directories with FITS files, so it is necesary to go inside the container for running all commands except 'juicer' (see below).
+Running lemon's commands using docker script generates an error loading the shared directories with FITS files, so it is necesary to go inside the container for running all commands except 'juicer' (see below).
 
 ## Example of running lemon astrometry using docker script
 #start the container in the image
