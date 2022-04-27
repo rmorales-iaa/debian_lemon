@@ -4,36 +4,46 @@ docker-lemon is a docker image which makes it easy to run [LEMON, the differenti
 
 `sudo docker build -t local_repo:debian_buster_lemon .`
 
-## Starting a container with the image
-`sudo docker run -it debian:lemon`
+## docker script to run lemmon commads
 
-Assuming you have fits files in ~/Pictures on your PC, the following command will make them available at /data in the container
+There is a docker script to run lemon commands in the repo:[lemon_docker](https://github.com/rmorales-iaa/debian_lemon/blob/master/lemon_docker)
 
-`docker run -v ~/Pictures:/data -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -it lemondoc bash`
+There is a docker image with docker deployed [lemon_docker_image](https://hub.docker.com/repository/docker/rmoralesiaa/debian)
 
-## Reducing fits files
+Please review the scritp to adapt properly the shared directories between host and container.
 
-`lemon astrometry data/in/ data/out/`
+Running the photometry command using docker script generates an error loading the FITS files, so it is necesary to go inside the container
 
-### Running mosaic
 
-An example of running against all fits files in 'data/in' dir over file 'a.fits'
+## Example of running lemon astrometry using docker script
+#start the container in the image
 
-`lemon mosaic data/in/*.fits data/out/a.fits`
+`./lemon_docker`
 
-### Run photometry
+`lemon astrometry --radius=0.5 /home/lemon/data/in/*.fits /home/lemon/data/out`
 
-`lemon photometry main_fits /dir/*.fits data/out/phot.LEMONdB`
 
-### Create the differential photometry data
+## Example of running lemon mosaic using docker script
+#start the container in the image
 
-This command will take data from the phot.LEMONdB and create a new database called curves.LEMONdB
+`./lemon_docker`
 
-`lemon diffphot data/out/phot.LEMONdB data/out/curves.LEMONdB`
+`lemon mosaic /home/lemon/data/in/*.fits /home/lemon/data/out/mosaic.fits`
 
-### Run the jucier browser app
+## Example of running lemon photometry using docker script
+#start the container in the image
 
-`lemon juicer data/out/curves.LEMONdB`
+`./lemon_docker`
+
+`su lemon`
+
+`lemon photometry ~/data/in/science_HAT-P-16-001Rbfa_OSN_1_5_2014_10_31T19_59_01_140_JOHNSON_R_30s_2048x2048_roper_OBJECT.fits  ~/data/in/*.fits ~/data/out/phot.LEMONdB`
+
+`lemon diffphot ~/data/out/phot.LEMONdB ~/data/out/curves.LEMONdB`
+
+#lemon juicer it a GUI, so it must be run outside of container using the docker script
+
+`./lemon_docker "/home/lemon/lemon/lemon juicer /home/lemon/data/out/curves.LEMONdB"`
 
 ![screenshot](https://raw.githubusercontent.com/dokeeffe/docker-lemon/master/docs/juicer-screenshot.png)
 
