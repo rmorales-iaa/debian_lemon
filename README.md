@@ -12,7 +12,7 @@ There is a docker image with docker deployed [lemon_docker_image](https://hub.do
 
 Please review the scritp to adapt properly the shared directories between host and container.
 
-Running the photometry command using docker script generates an error loading the FITS files, so it is necesary to go inside the container
+Running the photometry command using docker script generates an error loading the FITS files, so it is necesary to go inside the container for running all commands expcept juices (see below).
 
 
 ## Example of running lemon astrometry using docker script
