@@ -9,6 +9,14 @@ Please review the scritp to adapt properly the shared directories between host a
 The dependences required by lemon are too old (2017 or older) and the docker can not solve it, so onelemon commands does not work: mosaic
 This means that the user must solve align the images without lemon help.
 
+
+## Example of running lemon astrometry using docker script
+#start the container in the image
+
+`./lemon_docker`
+
+`lemon astrometry --radius=0.5 /home/lemon/data/in/*.fits /home/lemon/data/out`
+
 ## Example of running lemon photometry using docker script
 #start the container in the image
 
