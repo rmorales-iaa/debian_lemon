@@ -17,6 +17,14 @@ This means that the user must solve align the images without lemon help.
 
 `lemon astrometry --radius=0.5 /home/lemon/data/in/*.fits /home/lemon/data/out`
 
+
+## Example of running lemon mosaic using docker script
+#start the container in the image
+
+`./lemon_docker`
+
+`lemon astrometry /home/lemon/data/in/*.fits /home/lemon/data/out/mosaic.fits`
+
 ## Example of running lemon photometry using docker script
 #start the container in the image
 
