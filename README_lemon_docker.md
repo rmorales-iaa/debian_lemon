@@ -12,7 +12,7 @@ This means that the user must solve align the images without lemon help.
 ## Example of running lemon photometry using docker script
 #start the container in the image
 
-`./lemon_docker bash`
+`./lemon_docker`
 
 #running the photometry command using docker script generates an error loading the FITS files, so it is necesary to go inside the container
 
