@@ -84,7 +84,6 @@ RUN mkdir -p /root/Downloads   && \
     ln -s /usr/bin/mProjExec  /usr/bin/mProjExecMPI && \
     rm -fr /root/Downloads
 
-
 #clone lemon and install it
 USER lemon
 RUN git clone https://github.com/vterron/lemon.git /home/lemon/lemon
@@ -102,6 +101,15 @@ RUN python ./setup.py
 # Add custom CCD-filters here. My 'V' filter is 'PV' in the fits headers
 RUN echo '#lemon' >> ~/.bashrc
 RUN echo 'PATH=$PATH:~/lemon' >> ~/.bashrc
+
+RUN echo '#astrometry.net' >> ~/.bashrc && \
+    echo 'PATH=$PATH:/usr/local/astrometry/bin' >> ~/.bashrc
+
+RUN echo '#IRAF' >> ~/.bashrc && \
+    echo 'export iraf=/iraf/iraf/' >> ~/.bashrc && \ 
+    echo 'PATH=$PATH:/usr/local/bin/' >> ~/.bashrc 
+    
+
 RUN echo '[custom_filters]' >> ~/.lemonrc
 RUN echo 'PV = V (BAADER V)' >> ~/.lemonrc
 RUN echo 'PB = B (BAADER B)' >> ~/.lemonrc
