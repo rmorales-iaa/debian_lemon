@@ -6,6 +6,8 @@ There is a docker image with docker deployed [lemon_docker_image](https://hub.do
 
 Please review the scritp to adapt properly the shared directories between host and container.
 
+Running the photometry command using docker script generates an error loading the FITS files, so it is necesary to go inside the container
+
 
 ## Example of running lemon astrometry using docker script
 #start the container in the image
@@ -27,13 +29,11 @@ Please review the scritp to adapt properly the shared directories between host a
 
 `./lemon_docker`
 
-#running the photometry command using docker script generates an error loading the FITS files, so it is necesary to go inside the container
+`su lemon`
 
-`su lemon &&
-lemon photometry ~/data/in/science_HAT-P-16-001Rbfa_OSN_1_5_2014_10_31T19_59_01_140_JOHNSON_R_30s_2048x2048_roper_OBJECT.fits  ~/data/in/*.fits ~/data/out/phot.LEMONdB &&
-lemon diffphot ~/data/out/phot.LEMONdB ~/data/out/curves.LEMONdB &&
-exit &&
-exit`
+`lemon photometry ~/data/in/science_HAT-P-16-001Rbfa_OSN_1_5_2014_10_31T19_59_01_140_JOHNSON_R_30s_2048x2048_roper_OBJECT.fits  ~/data/in/*.fits ~/data/out/phot.LEMONdB`
+
+`lemon diffphot ~/data/out/phot.LEMONdB ~/data/out/curves.LEMONdB`
 
 #lemon juicer it a GUI, so it must be run outside of container using the docker script
 
