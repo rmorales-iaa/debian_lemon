@@ -2,7 +2,7 @@ docker-lemon is a docker image which makes it easy to run [LEMON, the differenti
 
 ## Building the image (just once)
 
-`sudo docker build -t debian:lemon .`
+`sudo docker build -t local_repo:debian_buster_lemon .`
 
 ## Starting a container with the image
 `sudo docker run -it debian:lemon`
