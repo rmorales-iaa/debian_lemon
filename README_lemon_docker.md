@@ -2,7 +2,7 @@
 
 There is a docker script to run lemon commands in the repo:[lemon_docker](https://github.com/rmorales-iaa/debian_lemon/blob/master/lemon_docker)
 
-There is a docker image with docker deployed [lemon_docker_image](https://hub.docker.com/repository/docker/rmoralesiaa/lemon)
+There is a docker image with docker deployed [lemon_docker_image](https://hub.docker.com/repository/docker/rmoralesiaa/debian)
 
 Please review the scritp to adapt properly the shared directories between host and container.
 
