@@ -3,7 +3,7 @@
 #user command
 USER_COMMAND=$1
 #----------------------------------
-DOCKER_IMAGE="local_repo:debian_buster_lemon"
+DOCKER_IMAGE="rmoralesiaa/debian:lemon"
 USER=lemon
 #----------------------------------
 XSOCK=/tmp/.X11-unix/X0
