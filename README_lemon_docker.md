@@ -20,7 +20,7 @@ Please review the scritp to adapt properly the shared directories between host a
 
 `./lemon_docker`
 
-`lemon astrometry /home/lemon/data/in/*.fits /home/lemon/data/out/mosaic.fits`
+`lemon mosaic /home/lemon/data/in/*.fits /home/lemon/data/out/mosaic.fits`
 
 ## Example of running lemon photometry using docker script
 #start the container in the image
