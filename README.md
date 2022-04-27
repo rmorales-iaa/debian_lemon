@@ -41,7 +41,7 @@ Running the photometry command using docker script generates an error loading th
 
 #lemon juicer it a GUI, so it must be run outside of container using the docker script
 
-`./lemon_docker"/home/lemon/lemon/lemon juicer /home/lemon/data/out/curves.LEMONdB"`
+`./lemon_docker "/home/lemon/lemon/lemon juicer /home/lemon/data/out/curves.LEMONdB"`
 
 ![screenshot](https://raw.githubusercontent.com/dokeeffe/docker-lemon/master/docs/juicer-screenshot.png)
 
