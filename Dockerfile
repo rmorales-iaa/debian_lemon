@@ -16,9 +16,6 @@ RUN apt-get install -y wget vim git csh curl
 #install python
 RUN apt install -y python 
 
-#python3 (used in astrometry.net)
-RUN ln -s /usr/bin/python /usr/bin/python3
-
 #install pip
 RUN mkdir /home/lemon/Downloads &&  cd /home/lemon/Downloads
 RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
