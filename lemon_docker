@@ -1,31 +1,67 @@
 #!/bin/bash
 #----------------------------------
-#user command
-USER_COMMAND=$1
+# set -x  # debug
+set -Eeuo pipefail
 #----------------------------------
-DOCKER_IMAGE="rmoralesiaa/debian:lemon"
-USER=lemon
+# User command (default to bash if none provided)
+if [ "$#" -gt 0 ]; then
+  USER_COMMAND=("$@")
+else
+  USER_COMMAND=("/bin/bash")
+fi
 #----------------------------------
-XSOCK=/tmp/.X11-unix/X0
-MY_DISPLAY=$DISPLAY
-XAUTHORITY_DIR=/tmp/.X11-unix:/tmp/.X11-unix
-XAUTHORITY_VOLUMEN="$HOME/.Xauthority:/root/.Xauthority:rw"
+# Docker image and user
+DOCKER_IMAGE="lemon:buster"
+DOCKER_USER="matilde"   # same user in host and container to avoid permission issues
 #----------------------------------
-#link local directorioes with directories inside the docker. Format: local_dir:docker_dir
-ASTROMETRY_NET_INDEX_DIR=/media/data/images/tools/astrometry.net/indexes_gaia_edr3/:/usr/local/astrometry/data
-LEMON_DATA_IN=/home/rafa/apps/lemon/data/in/:/home/lemon/data/in
-LEMON_DATA_OUT=/home/rafa/apps/lemon/data/out/:/home/lemon/data/out
+# Data directories (host)
+DATA_DIR="$HOME/apps/lemon/data"
+DATA_DIR_IN="$DATA_DIR/in/input_dir"
+DATA_DIR_OUT="$DATA_DIR/out"
+DATA_DIR_ASTROMETRY_INDEXES="$DATA_DIR/in/astrometry_net_indexes"
 #----------------------------------
-sudo docker run \
- --user $USER \
- --net host \
- -e DISPLAY=$MY_DISPLAY \
- --volume=$XAUTHORITY_VOLUMEN \
- -v $XAUTHORITY_DIR \
- -v $ASTROMETRY_NET_INDEX_DIR \
- -v $LEMON_DATA_IN \
- -v $LEMON_DATA_OUT \
- -it $DOCKER_IMAGE \
- $USER_COMMAND
+# X11 forwarding configuration
+MY_DISPLAY="${DISPLAY:-}"
+if [ -z "$MY_DISPLAY" ]; then
+  echo "Error: DISPLAY is not set. Are you running a graphical session?"
+  exit 1
+fi
+
+XAUTHORITY_VOLUME="$HOME/.Xauthority:/home/$DOCKER_USER/.Xauthority:rw"
+X11_SOCKET="/tmp/.X11-unix:/tmp/.X11-unix"
 #----------------------------------
-#end of file
+# Volume mappings (host:container)
+ASTROMETRY_NET_INDEX_DIR="$DATA_DIR_ASTROMETRY_INDEXES:/usr/local/astrometry/data"
+LEMON_DATA_IN="$DATA_DIR_IN:/home/$DOCKER_USER/data/in"
+LEMON_DATA_OUT="$DATA_DIR_OUT:/home/$DOCKER_USER/data/out"
+#----------------------------------
+# Ensure host directories exist
+mkdir -p "$DATA_DIR_ASTROMETRY_INDEXES" "$DATA_DIR_IN" "$DATA_DIR_OUT"
+#----------------------------------
+# Allow X access for the local user (narrow scope)
+xhost +SI:localuser:"$DOCKER_USER" >/dev/null 2>&1 || true
+
+# Make sure we revoke X access when the script exits
+cleanup() {
+  xhost -SI:localuser:"$DOCKER_USER" >/dev/null 2>&1 || true
+}
+trap cleanup EXIT
+#----------------------------------
+# Run container
+exec docker run \
+  --rm \
+  --user "$DOCKER_USER" \
+  --net host \
+  --hostname docker \
+  -v "$XAUTHORITY_VOLUME" \
+  -v "$X11_SOCKET" \
+  -e DISPLAY="$MY_DISPLAY" \
+  -e XAUTHORITY="/home/$DOCKER_USER/.Xauthority" \
+  -v "$ASTROMETRY_NET_INDEX_DIR" \
+  -v "$LEMON_DATA_IN" \
+  -v "$LEMON_DATA_OUT" \
+  --ulimit nofile=10000:10000 \
+  -it "$DOCKER_IMAGE" \
+  "${USER_COMMAND[@]}"
+#----------------------------------
+# End of file
