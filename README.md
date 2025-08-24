@@ -1,4 +1,4 @@
-There is a port of LEMON to Python 3 and GTK4 available at [yuzu] https://github.com/rmorales-iaa/py_yuzu
+There is a port of LEMON to Python3 and GTK4 available at [yuzu] https://github.com/rmorales-iaa/py_yuzu
 
 docker-lemon is a docker image which makes it easy to run [LEMON, the differential photometry pipeline](https://github.com/vterron/lemon)
 
